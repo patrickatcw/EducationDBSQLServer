@@ -1,0 +1,352 @@
+--CREATE STUDENT TABLE (PARENT)
+CREATE TABLE Student (
+StudentID INT NOT NULL,
+GraduationDate DATE NOT NULL,
+CONSTRAINT Student_PK PRIMARY KEY (StudentID)
+);
+
+--insert single row data for student table
+INSERT INTO Student
+VALUES (001, '2020-06-02');
+
+--insert 9 rows of data with a single sql statement
+INSERT INTO Student
+VALUES	
+(002, '2019-06-02'),
+(003, '2020-09-02'),
+(004, '2021-06-02'),
+(005, '2019-09-02'),
+(006, '2020-06-02'),
+(007, '2022-06-02'),
+(008, '2022-09-02'),
+(009, '2023-06-02'),
+(010, '2023-09-02');
+
+--select all for the student table
+SELECT * 
+FROM Student;
+
+--create a stored procedure for a query statement for student table
+CREATE PROCEDURE spGetStudents
+AS
+BEGIN
+	Select StudentID, GraduationDate 
+	from Student
+	END;
+
+--execute the stored procedure
+dbo.spGetStudents;
+
+--display create table statement
+sp_help Student;
+
+--end of the student table information-----------------------------------------------------------------------------------
+
+
+
+--CREATE ENROLLMENT TABLE (CHILD)
+CREATE TABLE Enrollment (
+ClassID INT NOT NULL,
+StudentID INT NOT NULL,
+EnrolledDate DATE NOT NULL,
+Grade VARCHAR(5) NOT NULL,
+CONSTRAINT Enrollment_PK PRIMARY KEY (ClassID)
+);
+
+--alter enrollment table adding foreign key
+ALTER TABLE Enrollment
+ADD FOREIGN KEY (StudentID) REFERENCES Student(StudentID);
+
+--insert a singel row of data
+INSERT INTO Enrollment
+VALUES (111, 001, '2016-08-21', 'Jun');
+
+--insert 4 rows of data with a single sql statement
+INSERT INTO Enrollment
+VALUES 
+(112, 002, '2015-08-21', 'Sen'),
+(113, 003, '2016-05-21', 'Jun'),
+(114, 004, '2017-08-21', 'Soph'),
+(115, 005, '2015-08-21', 'Sen');
+
+--select all data from the enrollment table
+SELECT *
+FROM Enrollment;
+
+--create a stored procedure for a query statement for enrollment
+CREATE PROCEDURE spGetEnrollmentDates
+AS
+BEGIN
+	Select EnrolledDate 
+	from Enrollment
+	END;
+
+--execute the stored procedure for enrollment
+dbo.spGetEnrollmentDates
+
+--display the create table statement for enrollment
+sp_help Enrollment;
+
+
+--end of the enrollment table information----------------------------------------------------------
+
+
+
+--CREATE CLASSES TABLE (CHILD)
+CREATE TABLE Classes (
+ClassID INT NOT NULL,
+CourseID VARCHAR(5) NOT NULL,
+InstructorID VARCHAR(5) NOT NULL,
+RoomID VARCHAR(5) NOT NULL,
+DayOfWeek VARCHAR(10) NOT NULL,
+StartTime DATETIME NOT NULL,
+CONSTRAINT ClassID_PK PRIMARY KEY (ClassID)
+);
+
+--alter classes table adding foreign key
+ALTER TABLE Classes
+ADD FOREIGN KEY (CourseID) REFERENCES Course(CourseID);
+
+--alter classes table adding foreign key
+ALTER TABLE Classes
+ADD FOREIGN KEY (InstructorID) REFERENCES Instructor(InstructorID);
+
+--alter classes table adding foreign key
+ALTER TABLE Classes
+ADD FOREIGN KEY (RoomID) REFERENCES Room(RoomID);
+
+--insert a single row of data for the classes table
+INSERT INTO Classes
+VALUES (111, 'GL225', 'RF673', 'ME510', 'MON', '2019-04-02 08:00:00');
+
+--insert 4 rows of data for the classes table
+INSERT INTO Classes
+VALUES 
+(112, 'HT111', 'JT100', 'CD210', 'TUES', '2019-04-02 08:00:00'),
+(113, 'CM103', 'LK786', 'MJ250', 'WED', '2019-04-02 14:00:00'),
+(114, 'CS351', 'SW971', 'JL310', 'THURS', '2019-04-02 18:00:00'),
+(115, 'EN112', 'AS129', 'GT320', 'FRI', '2019-04-02 10:00:00');
+
+--show all the data for the classes table
+SELECT *
+FROM Classes;
+
+--create a stored procedure for the classes table
+CREATE PROCEDURE spGetInstructors
+AS
+BEGIN
+	Select InstructorId 
+	from Classes
+	END;
+
+--execute the stored procedure for the classes table
+dbo.spGetInstructors;
+
+--display the create table statement for the classes table
+sp_help Classes;
+
+--end of the classes table information------------------------------------------------------------------
+
+
+--CREATE COURSE TABLE (PARENT)
+CREATE TABLE Course (
+CourseID VARCHAR(5) NOT NULL,
+CourseDesc VARCHAR(100) NOT NULL,
+CONSTRAINT CourseID_PK PRIMARY KEY (CourseID)
+);
+
+--insert 1 row of dataa into the table
+INSERT INTO Course
+VALUES ('MT101', 'Math 101 - learn the basics so you can function in the world');
+
+--insert 9 rows of data into table with 1 sql insert statement
+INSERT INTO Course
+VALUES
+('HT111', 'History 111 - learn about some history with a wacky professor'),
+('CM103', 'Chemistry 101 - learn the basics to blow some stuff up'),
+('EN112', 'English 112 - learn how to talk more better'),
+('BI211', 'Biology 211 - learn how your body works'),
+('SW425', 'Swimming 425 - advanced swimming techniques'),
+('CS351', 'Computer Science 351 - learn how to hack your way to millions'),
+('CL451', 'Calculus 451 - learn some hard math stuff'),
+('EL241', 'English Literature 241 - learn more about the classics'),
+('GL225', 'Geology 225 - rocks and layers and stuff');
+
+--select all from course table
+SELECT *
+FROM Course;
+
+--create a stored procedure for the course table, using an alias for results
+CREATE PROCEDURE spGetCoursesandDescriptions
+AS
+BEGIN
+	Select CourseDesc AS 'COURSE # with Description'
+	from Course
+	END;
+
+--execute the stored procedure
+dbo.spGetCoursesandDescriptions;
+
+--display info for the course table
+sp_help Course;
+
+--of of the course table information--------------------------------------------------------------
+
+
+--CREATE INSTRUCTOR TABLE (PARENT)
+CREATE TABLE Instructor (
+InstructorID VARCHAR(5) NOT NULL Primary Key,
+DeptID VARCHAR(5) NOT NULL,
+HireDate DATE
+);
+
+--insert 1 record into instructor table
+INSERT INTO Instructor
+VALUES ('PJ776', 'CS', '2004-03-15');
+
+--insert 9 records into instructor table
+INSERT INTO Instructor
+VALUES
+('LK786', 'CH', '2014-01-24'),
+('MN121', 'BI', '1999-11-03'),
+('RF673', 'GL', '2012-04-01'),
+('AS129', 'EN', '2017-02-11'),
+('PL300', 'MT', '2016-05-17'),
+('HY712', 'CH', '2007-10-03'),
+('OV004', 'BI', '2018-12-03'),
+('JT100', 'HS', '2001-07-22'),
+('NV887', 'HS', '1978-09-18'),
+('SW971', 'CS', '2013-07-25');
+
+--display all records from the table
+SELECT *
+FROM Instructor;
+
+--create a stored procedure for instructor table
+CREATE PROCEDURE spGetInstructorIDandStartDate
+AS
+BEGIN
+	Select InstructorID AS "Instrutor's ID Number",
+	HireDate AS 'Date of Hire'
+	from Instructor
+	END;
+
+--execute the stored procedure
+dbo.spGetInstructorIDandStartDate
+
+--display infor for the instructor talbe
+sp_help Instructor;
+
+--of of the instructor table information-----------------------------------------------------
+
+
+--CREATE ROOM TABLE (PARENT)
+CREATE TABLE Room (
+RoomID VARCHAR(5) NOT NULL Primary Key,
+RoomDesc VARCHAR(100) NOT NULL
+);
+
+--insert 1 record into table
+INSERT INTO Room
+VALUES ('BR110', 'Briar Building, room 110, chairs and table included');
+
+--insert 9 records with 1 statement into table
+INSERT INTO Room
+VALUES
+('GK110', 'Gake Building, room 313, comfy pillows'),
+('TM230', 'Tamar Building, room 230, you have to just sit on the floor'),
+('LK001', 'Luke Building, room 001, chairs and table included'),
+('AM120', 'Amy Building, room 120, chairs and table included'),
+('JL310', 'Jill Building, room 310, no chairs, just table'),
+('MJ250', 'Maj Building, room 250, chemistry lab'),
+('GT320', 'Gretta Building, room 320, bean bags and pillows'),
+('HT420', 'Heart Building, room 420, a lovely room'),
+('CD210', 'Cindy Building, room 210, a small room, very uncomfortable'),
+('ME510', 'Meredith Building, room 110, chairs and table included');
+
+--select all form table
+SELECT *
+FROM Room;
+
+--create a stored procedure
+CREATE PROCEDURE spReturnRoomNumberwithDescription
+AS
+BEGIN
+	Select RoomID AS 'Room #',
+	RoomDesc AS 'Building with Room Description'
+	from Room
+	END;
+
+--execute the stored procedure
+dbo.spReturnRoomNumberwithDescription
+
+--view all information about room table
+sp_help Room;
+
+--end of the room table information----------------------------------------------------------------------
+
+--selecting all records at once
+SELECT * 
+FROM Student;
+SELECT *
+FROM Enrollment;
+SELECT *
+FROM Classes;
+SELECT * 
+FROM Course;
+SELECT *
+FROM Instructor;
+SELECT *
+FROM Room;
+
+
+--inner join with enrollment and classes table
+SELECT *
+FROM Enrollment;
+SELECT *
+FROM Classes;
+
+SELECT StudentID, CourseID, InstructorID, RoomID
+from Classes
+JOIN Enrollment
+ON Classes.ClassID = Enrollment.ClassID;
+
+
+--another example, where is the student??
+SELECT *
+FROM Enrollment;
+SELECT *
+FROM Classes;
+
+SELECT StudentID, RoomID, DayOfWeek, StartTime
+from Classes
+JOIN Enrollment
+ON Classes.ClassID = Enrollment.ClassID;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
